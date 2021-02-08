@@ -8,11 +8,14 @@ import com.AutoPractice.utilities.Driver;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import io.cucumber.java.sl.In;
 import org.junit.Assert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class SummerDressRangeStep {
@@ -24,24 +27,6 @@ public class SummerDressRangeStep {
 
         Driver.get().get(ConfigurationReader.get("url"));
         summer.navigationMenu("Dresses", string);
-
-    }
-
-
-    @When("User changes price range {string}-{string}")
-    public void userChangesPriceRange(String arg0, String arg1) {
-        BrowserUtils.scrollToElement(Driver.get().findElement(By.id("layered_price_range")));
-        int x = 40;
-        BrowserUtils.waitFor(3);
-        WebElement slider = Driver.get().findElement(By.id("layered_price_range"));
-        int width = slider.getSize().getWidth();
-        Actions move = new Actions(Driver.get());
-        move.moveToElement(slider, ((width * x) / 100), 30).click();
-        move.build().perform();
-
-        System.out.println("Slider moved");
-        BrowserUtils.waitFor(5);
-
 
     }
 
@@ -70,4 +55,27 @@ public class SummerDressRangeStep {
     }
 
 
+    @When("User changes price range {int} to {int}")
+    public void userChangesPriceRangeTo(int left, int right) {
+        BrowserUtils.scrollToElement(summer.priceRange);
+
+        WebElement slider = Driver.get().findElement(By.xpath("(//a[@class='ui-slider-handle ui-state-default ui-corner-all'])[2]"));
+        for (int i = 0; i < 75; i++) {
+
+            slider.sendKeys(Keys.ARROW_LEFT);
+
+        }
+
+        String text = summer.priceRange.getText();
+        String[] rangeNums = text.split("-");
+        String leftnum = rangeNums[0].substring(1, 3);
+        String rightnum = rangeNums[1].substring(2, 4);
+
+        Assert.assertEquals(left,Integer.parseInt(leftnum));
+        Assert.assertEquals(right, Integer.parseInt(rightnum));
+
+
+
+
+    }
 }
