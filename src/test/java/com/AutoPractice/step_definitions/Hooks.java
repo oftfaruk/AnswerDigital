@@ -33,16 +33,7 @@ public class Hooks {
 
     }
 
-    @Before("@db")
-    public void setUpdb() {
-        System.out.println("\tconnecting to database...");
-    }
 
-    @After("@db")
-    public void closeDb() {
-        System.out.println("\tdisconnecting to database...");
-
-    }
 
 
 }
